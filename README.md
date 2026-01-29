@@ -112,8 +112,8 @@ Exploratory Extension: 2024–2025
 ## 5. Phase 1 Results — Conventional Analysis
 ### 5.1 Total Crime Trend
 
-📌 [Figure 1 here: Total International Crime Count by Year](notebooks/figures/phase1_V1_total_trend.png)
-📌 [Table 1 here: Total International Crime Count by Year](notebooks/figures/phase1_V1_total_trend_table.png)
+📌 ![Figure 1 here: Total International Crime Count by Year](notebooks/figures/phase1_V1_total_trend.png)
+📌 ![Table 1 here: Total International Crime Count by Year](notebooks/figures/phase1_V1_total_trend_table.png)
 
 X-axis: Year (2005–2023)
 Y-axis: Total number of international crime cases
@@ -128,115 +128,124 @@ Interpretation
 
 ➡️ 총량만으로도 구조적 단절 가능성 시사
 
-5.2 Category-level Trends
+### 5.2 Category-level Trends
 
-📌 [Figure 2 here: Category-level Count Trends](notebooks/figures/phase1_V2_category_trends.png)
-📌 [Table 2 here: Category-level Count by Year]
+📌 ![Figure 2 here: Category-level Count Trends](notebooks/figures/phase1_V2_category_trends.png)
+📌 ![Table 2 here: Category-level Count by Year](notebooks/figures/phase1_V2_category_trends_table.png)
 
 X-axis: Year
 Y-axis: Annual count by category
 
 Interpretation
 
-OTHER 범주가 절대적 비중 유지
+- OTHER 범주가 절대적 비중 유지
 
-FRAUD_FIN(국제 사기·금융범죄)의 구조적 증가
+- FRAUD_FIN(국제 사기·금융범죄)의 구조적 증가
 
-CYBER 범죄의 점진적 확대
+- CYBER 범죄의 점진적 확대
 
-5.3 Composition (Share) Analysis
+### 5.3 Composition (Share) Analysis
 
-📌 [Figure 3 here: Stacked Area Chart of Category Share] 
-📌 [Table 3 here: Category Share by Year]
+📌 ![Figure 3 here: Stacked Area Chart of Category Share](notebooks/figures/phase1_V3_share_stacked_area.png) 
+📌 ![Table 3 here: Category Share by Year](notebooks/figures/phase1_V3_share_stacked_area_table.png) 
 
 X-axis: Year
 Y-axis: Share (sum = 1)
 
 Interpretation
 
-OTHER 비중 감소
+- OTHER 비중 감소
 
-FRAUD_FIN, CYBER의 상대적 중요성 증가
+- FRAUD_FIN, CYBER의 상대적 중요성 증가
 
-총량보다 ‘구성 변화’가 핵심 신호
+- 총량보다 ‘구성 변화’가 핵심 신호
 
-6. Phase 2 Results — Structural Analysis
-6.1 Structural Distance & Change Points
+## 6. Phase 2 Results — Structural Analysis
+### 6.1 Structural Distance & Change Points
 
-📌 [Table 4 here: Structural Distance Between Consecutive Years]
-📌 [Table 5 here: Change Point Candidates]
+📌 ![Table 4 here: Structural Distance Between Consecutive Years](notebooks/figures/phase2_structure_distances_table.png) 
+📌 ![Table 5 here: Change Point Candidates](notebooks/figures/phase2_change_points_table.png) 
 
-Concept (직관적 설명)
+### Concept (직관적 설명)
 
-각 연도는 “범죄 유형 구성비 벡터”
+- 각 연도는 “범죄 유형 구성비 벡터”
 
-연도 간 거리 = 범죄 구조 차이
+### - 연도 간 거리 = 범죄 구조 차이
 
-Key Finding
+### Key Finding
 
-2018년, 2020년에서 구조 거리 급증
+- 2018년, 2020년에서 구조 거리 급증
 
-단순 변동 ❌ → 구조적 전환 시점
+- 단순 변동 ❌ → 구조적 전환 시점
 
-6.2 Regime Analysis
+### 6.2 Regime Analysis
 
-📌 [Table 6 here: Regime-wise Average Structure]
+📌 ![Table 6 here: Regime-wise Average Structure](notebooks/figures/phase2_regime_structure_summary_table.png) 
 
-Regime 0: 전통적 국제범죄 구조
+### Regime 0: 전통적 국제범죄 구조
 
-Regime 1: 금융·사이버 중심 구조
+### Regime 1: 금융·사이버 중심 구조
 
-Regime 2: 과도기적·불안정 구조
+### Regime 2: 과도기적·불안정 구조
 
 ➡️ 국제범죄 구조는 연속적 변화가 아닌 국면 전환
 
-6.3 PCA-based Structural Space Analysis (중요)
+### 6.3 PCA-based Structural Space Analysis (중요)
 
-📌 [Figure 7 here: PCA Trajectory of Crime Structure]
-📌 [Figure 8 here: EXT Projection onto PCA Space]
+📌 ![Figure 7 here: PCA Trajectory of Crime Structure](notebooks/figures/phase2_pca_trajectory_regimes.png) 
+📌 ![Figure 8 here: EXT Projection onto PCA Space](notebooks/figures/phase2_ext_projection_pca.png) 
 
-PC1 (X-axis)
+### PC1 (X-axis)
 
-전통 범죄 ↔ 금융·사이버 범죄 축
+- 전통 범죄 ↔ 금융·사이버 범죄 축
 
-구조 변화의 주된 방향
+- 구조 변화의 주된 방향
 
-PC2 (Y-axis)
+### PC2 (Y-axis)
 
-비주류 범죄 조합 및 내부 변동성
+- 비주류 범죄 조합 및 내부 변동성
 
-Interpretation
+### Interpretation
 
-Regime 간 이동은 “점프(jump)” 형태
+- Regime 간 이동은 “점프(jump)” 형태
 
-EXT(2024–2025)는 기존 Regime보다 더 진전된 위치
+- EXT(2024–2025)는 기존 Regime보다 더 진전된 위치
 
 ➡️ 과거 기준 대응의 한계 시사
 
-7. Conclusion
+## 7. Conclusion
 
-국제범죄는 단순히 “늘었다/줄었다”의 문제가 아니라,
-구조적으로 재편되고 국면이 전환되는 현상임이 확인되었다.
+본 분석 결과, 대한민국 국제범죄는 분석 기간 동안
+단일 범죄 유형의 증감만으로는 충분히 설명되기 어려운
+구성 및 비중 변화의 양상을 함께 보이는 것으로 관찰되었다.
 
-본 프로젝트는
-국제범죄 분석을 건수 중심 접근에서 구조 중심 접근으로 확장하였으며,
-정책·정보·치안 분야에서의 해석 프레임 전환 필요성을 제시한다.
+Phase 2에서 수행한 구조 거리 분석과 차원 축소(PCA) 결과는,
+일부 시점에서 범죄 구성 패턴이 이전 시기와
+구조적으로 구분되는 양상을 보였음을 시사한다.
+이러한 관찰은 기존의 건수 중심 분석으로는 포착하기 어려운
+변화 신호를 보조적으로 제시한다는 점에서 의미를 가진다.
 
-8. Limitations & Future Work
+다만, 본 결과는 탐색적 관찰에 기반한 것으로,
+구조 변화의 원인이나 정책적 효과를 직접 검증하는 것은 아니다.
+그럼에도 불구하고 본 연구는 국제범죄를 단일 분류 체계가 아닌
+구성과 맥락의 관점에서 관찰할 수 있는 분석 가능성을 제시하며,
+향후 보다 고차원적인 통계적 접근으로의 확장을 위한 기초 자료로 활용될 수 있을 것이다.
+
+### 8. Limitations & Future Work
 
 원자료 비공개로 인한 완전 재현성 한계
 
 국제 비교 분석의 제한적 적용
 
-Future Work
+### Future Work
 
-국가 간 구조 비교
+- 국가 간 구조 비교
 
-정책 개입 전·후 구조 변화 분석
+- 정책 개입 전·후 구조 변화 분석
 
-조기 경보(Early Warning) 지표 개발
+- 조기 경보(Early Warning) 지표 개발
 
-9. Use of AI
+### 9. Use of AI
 
 본 프로젝트에서는 AI 도구를 다음 목적에 한해 활용하였다.
 
