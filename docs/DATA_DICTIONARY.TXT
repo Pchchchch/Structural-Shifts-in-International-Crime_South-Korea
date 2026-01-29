@@ -1,0 +1,175 @@
+────────────────────────────────
+DATA_DICTIONARY.TXT (SPEC)
+────────────────────────────────
+
+문서명: data_dictionary.txt
+목적: 프로젝트 전 단계에서 공통으로 사용하는 테이블/컬럼의 의미, 타입, 제약 조건을 정의한다.
+버전: v1.0
+작성일: 2026-01-27 (KST)
+
+공통 enum 정의
+
+(1) source_primary (enum)
+
+NPA: 경찰청(또는 경찰 통계 기반 자료)
+
+SPO: 대검찰청/검찰 통계 기반 자료
+
+KCS: 관세청 통계 기반 자료
+
+UNODC: 국제 비교 및 정의 참고용(정량 결론 도출에는 제한적)
+
+(2) period_flag (enum)
+
+CORE: 2005–2023
+
+EXT: 2024–2025
+
+(3) category_std (enum)
+
+DRUG: 마약류 범죄
+
+TRAFFICKING: 인신매매/성착취/노동착취 등
+
+SMUGGLING: 밀수/관세범/불법무역
+
+CYBER: 국경을 넘는 사이버 기반 범죄
+
+FRAUD_FIN: 국제 사기/금융범죄(보이스피싱, 투자사기 등)
+
+IMMIGRATION: 불법체류 알선/브로커/출입국 관련 범죄
+
+OTHER: 상기 범주에 포함 불가 또는 불명확
+
+(4) confidence (enum)
+
+HIGH: 정의 및 매핑 근거 명확
+
+MEDIUM: 일부 해석 필요하나 합리적 매핑 가능
+
+LOW: 불확실성이 커서 분석 해석에 주의 필요 (기본 OTHER 권장)
+
+파일별 스키마 및 컬럼 설명
+
+A. data_processed/panel_year_category.csv
+설명: 연도×표준범주 단위의 발생 건수 패널 데이터
+
+컬럼 정의:
+
+year (int)
+· 의미: 연도(YYYY)
+· 범위: 2005–2025
+· 결측: 불가
+
+category_std (string, enum)
+· 의미: 표준 범주 코드(7개 중 1개)
+· 결측: 불가
+
+count (int or float)
+· 의미: 해당 연도-범주의 발생 건수(또는 사건 수)
+· 결측: 불가 (결측은 0으로 채움)
+· 주의: ‘발생’ 기준인지 ‘검거/기소’ 기준인지 source_primary 문서에 명시 필요
+
+source_primary (string, enum)
+· 의미: 해당 row의 1차 출처
+· 결측: 불가
+· 권장: 본 프로젝트의 main 출처 1개를 선택해 일관되게 유지
+
+period_flag (string, enum)
+· 의미: CORE(2005–2023) / EXT(2024–2025) 구분
+· 결측: 불가
+
+notes (string, optional)
+· 의미: 특이사항(분류 변경, 집계 기준 변경, 누락 가능성 등)
+· 결측: 가능
+
+제약 조건:
+
+(year, category_std, source_primary)는 유일해야 한다.
+
+EXT 구간은 “탐색적” 표기 대상이므로 notes에 잠정성 여부를 기록 권장.
+
+B. data_processed/shares_year_category.csv
+설명: 연도별 국제범죄 구조 벡터(구성비) 데이터
+
+컬럼 정의:
+
+year (int)
+· 의미/범위: panel과 동일
+
+category_std (string, enum)
+· 의미: 표준 범주 코드
+
+count (int or float)
+· 의미: 해당 연도-범주의 건수
+
+total_count (int or float)
+· 의미: 해당 연도의 모든 범주 합산 총 건수
+· 제약: 같은 year 내에서 모든 row가 동일한 값을 가져야 함
+
+share (float)
+· 의미: count / total_count
+· 범위: 0~1
+· 제약: 같은 year의 share 합은 1(±0.001 허용)
+
+period_flag (string, enum)
+· 의미: CORE/EXT
+
+제약 조건(검증 항목):
+
+total_count == Σ(count over category_std)
+
+Σ(share over category_std) ≈ 1.0
+
+C. data_processed/totals_year.csv (optional)
+설명: 연도별 총량 조회용 보조 테이블
+
+컬럼 정의:
+
+year (int)
+
+total_count (int or float)
+
+period_flag (string, enum)
+
+D. mapping/category_mapping_v1.csv / category_mapping_v2.csv
+설명: 원자료 범주(category_raw)를 표준범주(category_std)로 매핑하는 규칙 테이블
+
+컬럼 정의:
+
+mapping_version (string)
+· 예: v1, v2
+
+source (string, enum)
+· NPA/SPO/KCS/UNODC
+
+year_from (int) / year_to (int)
+· 의미: 해당 매핑이 유효한 연도 범위
+· v1: year_to ≤ 2023
+· v2: year_to ≤ 2025 허용
+
+category_raw (string)
+· 의미: 원자료에서 사용된 범주명(원문 그대로)
+
+category_std (string, enum)
+· 의미: 프로젝트 표준 범주 코드
+
+confidence (string, enum)
+· 의미: 매핑 확신 수준(HIGH/MEDIUM/LOW)
+
+notes (string)
+· 의미: 근거/해석/주의사항/참조 문서 등
+
+해석/보고 관련 주의사항 (Report Safety)
+
+CORE(2005–2023) 결과는 구조적 결론 도출 가능
+
+EXT(2024–2025) 결과는 탐색적 관측으로만 서술
+
+OSINT 자료는 정량 분석 데이터로 사용하지 않음
+
+정책 제안, 특정 집단에 대한 가치 판단은 포함하지 않음
+
+────────────────────────────────
+END OF DATA DICTIONARY
+────────────────────────────────

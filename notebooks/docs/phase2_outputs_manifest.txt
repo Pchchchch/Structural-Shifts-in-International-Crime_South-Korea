@@ -1,0 +1,18 @@
+PHASE 2 OUTPUTS MANIFEST
+Generated: 2026-01-30 07:04:12
+
+[FIGURES]
+- phase2_structure_distances_table.png :: OK
+- phase2_change_points_table.png :: OK
+- phase2_regime_structure_summary_table.png :: OK
+- phase2_pca_trajectory_regimes.png :: OK
+- phase2_ext_projection_pca.png :: OK
+
+[TABLES]
+- phase2_structure_distances.csv :: OK
+- phase2_change_points.csv :: OK
+- phase2_regime_structure_summary.csv :: OK
+
+[NOTES]
+- CORE(2005–2023) only for structural conclusions.
+- EXT(2024–2025) is projection-only (exploratory).

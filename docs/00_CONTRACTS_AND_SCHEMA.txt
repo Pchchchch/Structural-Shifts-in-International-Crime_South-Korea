@@ -1,0 +1,256 @@
+────────────────────────────────
+00_CONTRACTS_AND_SCHEMA (TXT SPEC)
+────────────────────────────────
+
+[문서 목적]
+본 문서는 프로젝트 전 단계(수집/전처리/분석/시각화)에서 공통으로 사용하는
+데이터 스키마, 표준 카테고리(category_std), 매핑 규칙, 파일 입출력 규격을 정의한다.
+이 문서에 정의된 규격은 “계약(Contract)”이며, 이후 브랜치에서는 이를 변경하지 않는다.
+(변경이 필요할 경우, 반드시 본 문서 버전을 갱신하고 변경 이력을 남긴다.)
+
+프로젝트 범위 및 기간 계약
+
+Core Analysis Period: 2005–2023
+· 확정된 공식 통계 기반
+· 구조 변화/국면(regime)에 대한 결론은 이 구간에서만 도출
+
+Exploratory Extension Period: 2024–2025
+· 잠정/부분 공개 가능
+· 결론 도출 금지, 방향성 관측만 허용
+· 매핑 규칙은 v2를 사용 가능
+
+표준 범죄 카테고리 계약 (category_std)
+
+본 프로젝트는 다양한 원자료의 범주 체계를 아래 7개 표준 카테고리로 통일한다.
+(표준 카테고리는 분석 단위이며, 이후 변경하지 않는다.)
+
+DRUG
+· 마약류 범죄(제조/밀수/유통/투약 등 포함 가능)
+
+TRAFFICKING
+· 인신매매/성착취/노동착취 등 인권침해형 범죄
+
+SMUGGLING
+· 관세범/밀수/불법무역 관련 범죄(품목 무관)
+
+CYBER
+· 국경을 넘는 사이버 기반 범죄(피싱/해킹/랜섬/계정탈취 등, 원자료 정의 준수)
+
+FRAUD_FIN
+· 국제 사기/금융범죄(보이스피싱, 투자사기, 불법송금 등 원자료 정의 준수)
+
+IMMIGRATION
+· 불법체류 알선/브로커/위변조 서류 등 출입국·체류 관련 범죄
+
+OTHER
+· 상기 범주로 분류 불가하거나 원자료 범주가 불명확한 항목
+
+[중요 원칙]
+
+category_std는 “개념적 일관성”이 최우선이다.
+
+원자료의 범주 명칭이 바뀌더라도, 표준 카테고리는 유지한다.
+
+불확실한 항목은 OTHER로 우선 귀속하고, notes에 사유를 기록한다.
+
+데이터 출처 계약 (source)
+
+본 프로젝트는 공식 통계를 Primary로 사용한다.
+
+소스 구분은 다음 값 중 하나를 사용한다.
+
+source (enum):
+
+NPA (경찰청)
+
+SPO (검찰/대검찰청)
+
+KCS (관세청)
+
+UNODC (정의/비교용, 정량 결론용으로는 제한적으로 사용)
+
+[OSINT 사용 원칙]
+
+OSINT는 정량 분석 데이터로 사용하지 않는다.
+
+OSINT는 “정의/맥락/설명” 보조 참고자료로만 docs에 기록한다.
+
+파일/폴더 규격 (Directory & File I/O Contract)
+
+프로젝트 루트: /international-crime-structure/
+
+폴더 규격 (고정)
+
+data_raw/
+· 원자료(원본) 및 원본 형태 보존
+· 파일명 규칙: <source><docname><year_or_range>.<ext>
+· 원본 수정 금지
+
+mapping/
+· 매핑 테이블 및 데이터 사전
+· category_mapping_v1.csv (Core 전용: 2005–2023)
+· category_mapping_v2.csv (Extension 포함: 2024–2025 반영 가능)
+· data_dictionary.txt (컬럼 설명)
+
+data_processed/
+· 분석/시각화에 직접 쓰는 정제 데이터 (CSV 고정)
+· panel_year_category.csv
+· shares_year_category.csv
+· (선택) totals_year.csv
+
+figures/
+· 모든 시각화 산출물 (png 권장)
+· 파일명 규칙: phaseX_V<번호>_<short_title>.png
+
+docs/
+· methodology.txt / limitations.txt / data_sources.txt 등 문서
+
+[입출력 고정 규칙]
+
+전처리 브랜치는 반드시 data_processed/에 계약된 파일명을 생성한다.
+
+이후 분석/시각화 브랜치는 data_processed/ 파일만을 입력으로 사용한다.
+
+원자료를 직접 읽는 행위는 data-collection / preprocessing 브랜치에서만 허용한다.
+
+매핑 테이블 규격 (category_mapping_v1.csv / v2.csv)
+
+목적:
+원자료의 범주(category_raw)를 표준 범주(category_std)로 변환하기 위한 규칙 테이블
+
+CSV 컬럼 (고정)
+
+mapping_version: string (예: v1, v2)
+
+source: enum (NPA, SPO, KCS, UNODC)
+
+year_from: int
+
+year_to: int
+
+category_raw: string (원자료 범주명 그대로)
+
+category_std: enum (DRUG, TRAFFICKING, SMUGGLING, CYBER, FRAUD_FIN, IMMIGRATION, OTHER)
+
+confidence: enum (HIGH, MEDIUM, LOW)
+
+notes: string (분류 변경, 애매함, 근거 문서 등)
+
+규칙:
+
+v1은 year_to가 최대 2023을 넘지 않는다.
+
+v2는 2024–2025에 대한 추가 매핑을 허용한다.
+
+동일 source에서 동일 category_raw가 연도에 따라 의미가 달라지면,
+year_from/year_to를 분리하여 별도 행으로 기록한다.
+
+confidence가 LOW이면 OTHER로 두는 것을 기본으로 하되,
+분석 상 필요할 경우 notes에 근거를 명확히 남긴다.
+
+분석용 정제 데이터 스키마 (data_processed)
+
+(1) panel_year_category.csv
+목적: 연도×표준범주 단위의 “발생 건수” 패널 데이터
+
+컬럼 (고정)
+
+year: int (YYYY)
+
+category_std: enum (7개)
+
+count: float or int (결측 불가, 결측은 0 처리 후 기록)
+
+source_primary: enum (NPA/SPO/KCS)
+
+period_flag: enum (CORE, EXT)
+
+notes: string (선택; 특정 연도의 특이사항)
+
+제약 조건
+
+year는 2005–2025 범위
+
+category_std는 7개 중 하나
+
+(year, category_std) 조합은 source_primary 기준으로 유일해야 함
+(중복 발생 시 preprocessing에서 해결)
+
+(2) shares_year_category.csv
+목적: 연도별 국제범죄 구조 벡터(구성비) 데이터
+
+컬럼 (고정)
+
+year: int
+
+category_std: enum
+
+count: float or int
+
+total_count: float or int
+
+share: float (0~1)
+
+period_flag: enum (CORE, EXT)
+
+제약 조건
+
+각 year에 대해 share 합은 1(허용 오차 ±0.001)
+
+total_count는 해당 연도의 category_std count 합과 동일해야 함
+
+(3) totals_year.csv (선택)
+목적: 연도별 총량을 빠르게 조회하기 위한 보조 테이블
+
+컬럼 (고정)
+
+year: int
+
+total_count: float or int
+
+period_flag: enum (CORE, EXT)
+
+Phase별 입력 파일 계약 (Downstream Safety)
+
+Phase 1 (Conventional Analysis) 입력:
+· data_processed/panel_year_category.csv
+· data_processed/totals_year.csv (선택)
+
+Phase 2 (Structural Analysis) 입력:
+· data_processed/shares_year_category.csv
+
+Phase 3 (Exploratory Extension) 입력:
+· data_processed/shares_year_category.csv
+· mapping/category_mapping_v2.csv (설명/근거용)
+
+[중요]
+분석/시각화 단계에서는 data_raw를 직접 참조하지 않는다.
+(재현성 및 브랜치 간 충돌 방지)
+
+품질/재현성 최소 규격 (Non-Negotiable)
+
+모든 노트북은 상단에 다음을 반드시 포함한다.
+
+목적(What this notebook does)
+
+Inputs / Outputs (파일 경로)
+
+스키마 확인(컬럼 리스트 + dtype)
+
+모든 시각화는 figures/에 자동 저장한다.
+
+seed 고정(필요한 경우)
+
+CORE/EXT 결과는 명확히 분리 표기한다.
+
+변경 관리 (Versioning Rule)
+
+category_std 목록 변경: 원칙적으로 금지
+
+매핑 변경: mapping_version을 증가시키고, 변경 사유를 notes에 기록
+
+스키마 변경: docs/data_dictionary.txt 및 본 문서에 변경 이력 기록 후 진행
+
+────────────────────────────────
+END OF CONTRACT SPEC
+────────────────────────────────
